@@ -12,6 +12,8 @@ while true; do
     rsync -a --delete "$SRC"/ storage/session/ 2>/dev/null || cp -r "$SRC"/. storage/session/
     git add storage/session .backup-token 2>/dev/null
     git commit -m "auto-backup $(date '+%F %H:%M')" -q 2>/dev/null
+    # pull-rebase dulu supaya push tidak ditolak kalau session lain juga push
+    git pull --rebase -q origin main 2>/dev/null
     git push -q origin main 2>&1 | rg -v "warning" > /dev/null
     echo "[backup $(date '+%F %H:%M')] Backup terkirim"
   else
